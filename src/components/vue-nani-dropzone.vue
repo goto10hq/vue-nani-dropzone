@@ -25,6 +25,7 @@
   import Draggable from 'vuedraggable'
   import Slug from 'slug'
   var Dropzone = require('dropzone')
+  var Path = require('path')
 
   export default {
     name: 'dropzone',
@@ -108,7 +109,7 @@
     },
     mounted () {
       var self = this
-
+            
       var dz = new Dropzone(self.$refs.formie, {
         url: self.url,
         paramName: self.fileParameter,
@@ -165,7 +166,8 @@
         },
         renameFile: function (file) {
           if (self.slugify) {
-            return Slug(file.name)
+            let fn = Path.join(Slug(Path.basename(file.name, Path.extname(file.name))) + Path.extname(file.name))            
+            return fn
           }
 
           return file.name

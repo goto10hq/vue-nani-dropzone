@@ -34,7 +34,7 @@
 <script>
   import Vue from "vue";
   import VueNaniDropzone from "../src/index.js";
-
+  
   export default {
     name: "app",
     data() {
