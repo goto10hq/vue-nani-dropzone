@@ -1,6 +1,6 @@
 {
   "name": "vue-nani-dropzone",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Feed me with files",
   "license": "MIT",
   "author": "frohikey",
@@ -23,20 +23,20 @@
   ],
   "private": false,
   "scripts": {
-    "build": "poi --prod --config ./poi.docs.js && poi --prod --config ./poi.config.js && rm ./dist/index.html",             
+    "build": "poi --prod --config ./poi.docs.js && poi --prod --config ./poi.config.js && rm ./dist/index.html",
     "dev": "poi --serve --config ./poi.docs.js"
-  }, 
+  },
   "devDependencies": {
-    "poi": "^12.4.2",
-    "vue-template-compiler": "^2.6.8",
+    "vue": "^2.6.10",
+    "poi": "^12.5.6",
+    "vue-template-compiler": "^2.6.10",
     "sass-loader": "^7.1.0",
     "node-sass": "^4.11.0"
   },
-  "dependencies": {
-    "dropzone": "^5.5.1",
-    "vue": "^2.6.8",
-    "vue-nani-spinner": "^1.0.0",
-    "vuedraggable": "^2.19.0"
+  "dependencies": {    
+    "slug": "^1.0.0",    
+    "vue-nani-spinner": "^1.1.0",
+    "vuedraggable": "^2.19.2"
   },
   "peerDependencies": {
     "dropzone": "^5.5.0"

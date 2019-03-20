@@ -13,8 +13,9 @@
       url="/upload-image"
       v-model="attachments"
       :sortable="true"
+      :slugify="true"
       text="Upload some files here..."
-      file-parameter="uploadfile"      
+      file-parameter="uploadfile"          
       >
       <template slot="file" slot-scope="{data}">
         <div>

@@ -21,50 +21,55 @@
   </div>
 </template>
 <script>
-  import Spinner from "vue-nani-spinner";
-  import Draggable from "vuedraggable";
-  var Dropzone = require("dropzone");
+  import Spinner from 'vue-nani-spinner'
+  import Draggable from 'vuedraggable'
+  import Slug from 'slug'
+  var Dropzone = require('dropzone')
 
   export default {
-    name: "dropzone",
+    name: 'dropzone',
     components: {
       Draggable,
       Spinner
     },
     model: {
-      prop: "modelValue",
-      event: "files"
+      prop: 'modelValue',
+      event: 'files'
     },
     props: {
       id: {
         type: String,
-        default() {
-          return "vue-nani-dropzone-id-" + this._uid;
+        default () {
+          return 'vue-nani-dropzone-id-' + this._uid
         }
       },
       rowClass: {
         type: String,
-        default() {
-          return "row";
+        default () {
+          return 'row'
         }
       },
       sortable: {
         type: Boolean,
         default: false
       },
+      slugify: {
+        type: Boolean,
+        default: false
+      },
       modelValue: {
         type: Array,
-        default() {
-          return [];
+        default () {
+          return []
         }
       },
       className: {
         type: String,
-        default: "vue-nani-dropzone"
+        default: 'vue-nani-dropzone'
       },
       text: {
         type: String,
-        default: "Drop files here or click to upload"
+        default: 'Drop files here or click to upload'
       },
       maxFiles: {
         type: Number,
@@ -76,33 +81,33 @@
       },
       fileParameter: {
         type: String,
-        default: "file"
+        default: 'file'
       },
       parallelUploads: {
         type: Number,
         default: 1
       }
     },
-    data() {
+    data () {
       return {
         uploading: false,
         progress: 0,
         dz: {},
         files: this.modelValue
-      };
-    },
-    methods: {
-      removeFile(p, idx) {
-        this.dz.removeFile(self.dz.files[idx]);
-        this.files.$remove(p);
-      },
-      orderChanged() {
-        this.$emit("files", this.files);
-        this.$emit("files-order-changed");
       }
     },
-    mounted() {
-      var self = this;
+    methods: {
+      removeFile (p, idx) {
+        this.dz.removeFile(self.dz.files[idx])
+        this.files.$remove(p)
+      },
+      orderChanged () {
+        this.$emit('files', this.files)
+        this.$emit('files-order-changed')
+      }
+    },
+    mounted () {
+      var self = this
 
       var dz = new Dropzone(self.$refs.formie, {
         url: self.url,
@@ -111,24 +116,24 @@
         parallelUploads: self.parallelUploads,
         createImageThumbnails: false,
         previewTemplate: '<div style="display:none"></div>',
-        init: function() {
-          var that = this;
-          this.on("sending", function(file) {
+        init: function () {
+          var that = this
+          this.on('sending', function (file) {
             if (self.maxFiles == 0 || self.maxFiles > self.files.length) {
-              return;
+              return
             }
 
-            self.$emit("max-files-exceeded", file);
-            self.uploading = false;
+            self.$emit('max-files-exceeded', file)
+            self.uploading = false
 
             try {
-              that.off("error");
-              that.removeFile(file);
+              that.off('error')
+              that.removeFile(file)
             } catch (e) {
             } finally {
-              that.on("error");
+              that.on('error')
             }
-          });
+          })
 
           // this.on('maxfilesexceeded',
           //    function (file) {
@@ -137,44 +142,51 @@
           //    }
           // );
 
-          this.on("error", function(file, message) {
-            self.uploading = false;
-            self.$emit("error", message);
-          });
+          this.on('error', function (file, message) {
+            self.uploading = false
+            self.$emit('error', message)
+          })
 
-          this.on("success", function(file, json) {
-            self.uploading = false;
+          this.on('success', function (file, json) {
+            self.uploading = false
 
-            self.files.push(json);
-            self.$emit("file-uploaded", json);
-          });
+            self.files.push(json)
+            self.$emit('file-uploaded', json)
+          })
 
-          this.on("uploadprogress", function(file, progress, bytesSent) {
-            let p = Math.round(progress);
-            self.progress = p;
+          this.on('uploadprogress', function (file, progress, bytesSent) {
+            let p = Math.round(progress)
+            self.progress = p
             if (p < 100) {
-              self.uploading = true;
+              self.uploading = true
             }
-            self.$emit("upload-progress", Math.round(progress));
-          });
+            self.$emit('upload-progress', Math.round(progress))
+          })
+        },
+        renameFile: function (file) {
+          if (self.slugify) {
+            return Slug(file.name)
+          }
+
+          return file.name
         }
-      });
+      })
 
       // if (self.maxFiles > 0) {
       //     dz.maxFiles = self.maxFiles;
       // }
 
-      self.dz = dz;
+      self.dz = dz
 
       for (let i = 0; i < self.files.length; i++) {
-        let mockFile = { name: self.files[i].file, size: 123 };
-        dz.emit("addedfile", mockFile);
-        dz.emit("complete", mockFile);
+        let mockFile = { name: self.files[i].file, size: 123 }
+        dz.emit('addedfile', mockFile)
+        dz.emit('complete', mockFile)
 
-        dz.files.push(mockFile);
+        dz.files.push(mockFile)
       }
     }
-  };
+  }
 </script>
 <style lang="scss">
   $grid-gutter-width: 30px !default;
